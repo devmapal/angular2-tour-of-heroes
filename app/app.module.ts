@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule, routedComponents } from './app-routing.module';
 import { HeroService } from './hero.service';
 import { HeroSearchComponent } from './hero-search.component';
+import { WebSocketService } from './web-socket.service';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { HeroSearchComponent } from './hero-search.component';
     routedComponents
   ],
   providers: [
-    HeroService
+    HeroService,
+    WebSocketService
   ],
   bootstrap: [AppComponent]
 })
