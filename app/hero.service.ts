@@ -1,15 +1,30 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable, Output } from '@angular/core';
 import { Headers, Http, Response } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
 import { Hero } from './hero';
+import { WebSocketService } from './web-socket.service';
 
 @Injectable()
 export class HeroService {
   private heroesUrl = 'http://127.0.0.1:8001/api/hero';  // URL to web api
 
-  constructor(private http: Http) { }
+  constructor(private http: Http, private webSocketService: WebSocketService) {
+    webSocketService.wsObservable.subscribe(data => {
+        this.onmessage(data)
+    });
+  }
+
+  @Output() deleteEvent: EventEmitter<any> = new EventEmitter<any>();
+
+  private onmessage(data: any): void {
+    let payload = data.payload;
+
+    if(payload.action === 'delete') {
+      this.deleteEvent.emit(payload.pk);
+    }
+  }
 
   getHeroes(): Promise<Hero[]> {
     return this.http

@@ -50,6 +50,9 @@ export class HeroesComponent implements OnInit {
 
   ngOnInit(): void {
     this.getHeroes();
+    this.heroService.deleteEvent.subscribe(pk => {
+      this.heroes = this.heroes.filter(h => h.id != pk);
+    });
   }
 
   onSelect(hero: Hero): void {
