@@ -35,4 +35,8 @@ export class WebSocketService {
       };
     }).share();
   }
+
+  sendData(message: Object): void {
+    this.ws.send(JSON.stringify(message));
+  }
 }

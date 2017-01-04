@@ -46,16 +46,17 @@ export class HeroService {
     return this.post(hero);
   }
 
-  delete(hero: Hero): Promise<Response> {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
+  delete(hero: Hero): void {
+    let data: Object = {
+      'stream': 'hero',
+      'payload': {
+        'pk': hero.id,
+        'action': 'delete',
+        'model': 'hero_service.hero',
+      }
+    }
 
-    let url = `${this.heroesUrl}/${hero.id}`;
-
-    return this.http
-      .delete(url, { headers: headers })
-      .toPromise()
-      .catch(this.handleError);
+    this.webSocketService.sendData(data);
   }
 
   // Add new Hero
