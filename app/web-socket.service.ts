@@ -10,23 +10,23 @@ export class WebSocketService {
     this.wsObservable = Observable.create(observer => {
       this.ws = new WebSocket(CHANNELS_WEBSOCKET_URL);
  
-      this.ws.onopen = (e) => {
+      this.ws.onopen = (event) => {
       };
  
-      this.ws.onclose = (e) => {
+      this.ws.onclose = (event) => {
         if (e.wasClean) {
           observer.complete();
         } else {
-          observer.error(e);
+          observer.error(event);
         }
       };
  
-      this.ws.onerror = (e) => {
-        observer.error(e);
+      this.ws.onerror = (event) => {
+        observer.error(event);
       }
  
-      this.ws.onmessage = (e) => {
-        observer.next(JSON.parse(e.data));
+      this.ws.onmessage = (event) => {
+        observer.next(JSON.parse(event.data));
       }
  
       return () => {
