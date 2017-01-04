@@ -34,7 +34,6 @@ export class HeroesComponent implements OnInit {
 
   close(savedHero: Hero): void {
     this.addingHero = false;
-    if (savedHero) { this.getHeroes(); }
   }
 
   deleteHero(hero: Hero, event: any): void {
@@ -44,6 +43,20 @@ export class HeroesComponent implements OnInit {
 
   ngOnInit(): void {
     this.getHeroes();
+
+    this.heroService.createEvent.subscribe(hero => {
+      this.heroes.push(hero);
+    });
+
+    this.heroService.updateEvent.subscribe(hero => {
+      for(let h of this.heroes) {
+        if(hero.id === h.id) {
+          h.name = hero.name;
+          break;
+        }
+      }
+    });
+
     this.heroService.deleteEvent.subscribe(pk => {
       this.heroes = this.heroes.filter(h => h.id != pk);
     });

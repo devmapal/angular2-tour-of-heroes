@@ -36,13 +36,7 @@ export class HeroDetailComponent implements OnInit {
   }
 
   save(): void {
-    this.heroService
-        .save(this.hero)
-        .then(hero => {
-          this.hero = hero; // saved hero, w/ id if new
-          this.goBack(hero);
-        })
-        .catch(error => this.error = error); // TODO: Display error message
+    this.heroService.save(this.hero);
   }
 
   goBack(savedHero: Hero = null): void {

@@ -16,12 +16,20 @@ export class HeroService {
     });
   }
 
-  @Output() deleteEvent: EventEmitter<any> = new EventEmitter<any>();
+  @Output() createEvent: EventEmitter<Hero> = new EventEmitter<Hero>();
+  @Output() updateEvent: EventEmitter<Hero> = new EventEmitter<Hero>();
+  @Output() deleteEvent: EventEmitter<number> = new EventEmitter<number>();
 
   private onmessage(data: any): void {
     let payload = data.payload;
 
-    if(payload.action === 'delete') {
+    if(payload.action === 'create') {
+        let hero: Hero = {'id': payload.pk, 'name': payload.data.name} as Hero;
+        this.createEvent.emit(hero);
+    } else if(payload.action === 'update') {
+        let hero: Hero = {'id': payload.pk, 'name': payload.data.name} as Hero;
+        this.updateEvent.emit(hero);
+    } else if(payload.action === 'delete') {
       this.deleteEvent.emit(payload.pk);
     }
   }
@@ -39,11 +47,12 @@ export class HeroService {
       .then(heroes => heroes.find(hero => hero.id === id));
   }
 
-  save(hero: Hero): Promise<Hero> {
+  save(hero: Hero): void {
     if (hero.id) {
-      return this.put(hero);
+      this.update(hero);
+    } else {
+      this.create(hero);
     }
-    return this.post(hero);
   }
 
   delete(hero: Hero): void {
@@ -60,30 +69,36 @@ export class HeroService {
   }
 
   // Add new Hero
-  private post(hero: Hero): Promise<Hero> {
-    let headers = new Headers({
-      'Content-Type': 'application/json'
-    });
+  private create(hero: Hero): void {
+    let data: Object = {
+      'stream': 'hero',
+      'payload': {
+        'action': 'create',
+        'model': 'hero_service.hero',
+        'data': {
+          'name': hero.name,
+        }
+      }
+    }
 
-    return this.http
-      .post(this.heroesUrl, JSON.stringify(hero), { headers: headers })
-      .toPromise()
-      .then(res => res.json().data)
-      .catch(this.handleError);
+    this.webSocketService.sendData(data);
   }
 
   // Update existing Hero
-  private put(hero: Hero): Promise<Hero> {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
+  private update(hero: Hero): void {
+    let data: Object = {
+      'stream': 'hero',
+      'payload': {
+        'pk': hero.id,
+        'action': 'update',
+        'model': 'hero_service.hero',
+        'data': {
+          'name': hero.name,
+        }
+      }
+    }
 
-    let url = `${this.heroesUrl}/${hero.id}`;
-
-    return this.http
-      .put(url, JSON.stringify(hero), { headers: headers })
-      .toPromise()
-      .then(() => hero)
-      .catch(this.handleError);
+    this.webSocketService.sendData(data);
   }
 
   private handleError(error: any): Promise<any> {
