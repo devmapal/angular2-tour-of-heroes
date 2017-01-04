@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Rx';
 
 @Injectable()
 export class WebSocketService {
-  private ws: any;
+  private ws: WebSocket;
   wsObservable: Observable<any>;
 
   constructor(@Inject('CHANNELS_WEBSOCKET_URL') CHANNELS_WEBSOCKET_URL) {
