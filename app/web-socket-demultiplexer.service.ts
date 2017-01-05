@@ -26,15 +26,14 @@ export class WebSocketDemultiplexerService {
     eventEmitter.emit(data.payload);
   }
 
-  sendData(stream: string, message: Object): void {
+  sendData(stream: string, payload: Object): void {
     this.webSocketService.sendData({
       'stream': stream,
-      'payload': message,
+      'payload': payload,
     });
   }
 
   subscribe(stream: string, callback: WebSocketDemultiplexerCallback): void {
-    console.log(stream);
     if(!this.eventByStream.has(stream)) {
       this.eventByStream.set(stream, new EventEmitter());
     }

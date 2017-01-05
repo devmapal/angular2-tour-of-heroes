@@ -75,8 +75,8 @@ export class WebSocketDataBindingService {
     let eventEmitter = eventByModel.get(model);
     eventEmitter.subscribe(callback);
 
-    this.webSocketDemultiplexerService.subscribe(stream, payload => {
-      this.onmessage(stream, payload as DataBinding);
+    this.webSocketDemultiplexerService.subscribe(stream, (payload: DataBinding) => {
+      this.onmessage(stream, payload);
     });
   }
 }

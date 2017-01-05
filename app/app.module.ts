@@ -29,7 +29,7 @@ import { WebSocketDataBindingService } from './web-socket-data-binding.service';
     WebSocketService,
     WebSocketDemultiplexerService,
     WebSocketDataBindingService,
-    { provide: 'CHANNELS_WEBSOCKET_URL', useValue: 'ws://127.0.0.1:8001/api/ws' }
+    { provide: 'WEBSOCKET_URL', useValue: 'ws://127.0.0.1:8001/api/ws' }
   ],
   bootstrap: [AppComponent]
 })

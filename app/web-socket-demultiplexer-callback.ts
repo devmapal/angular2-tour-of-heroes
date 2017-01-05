@@ -1,3 +1,3 @@
 export interface WebSocketDemultiplexerCallback {
-  (payload: Object): any;
+  (payload: Object): void;
 }

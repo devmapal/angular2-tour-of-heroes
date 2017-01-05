@@ -1,5 +1,5 @@
 import { DataBinding } from './data-binding';
 
 export interface WebSocketDataBindingCallback {
-  (payload: DataBinding): any;
+  (payload: DataBinding): void;
 }

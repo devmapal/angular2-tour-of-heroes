@@ -6,9 +6,9 @@ export class WebSocketService {
   private ws: WebSocket;
   wsObservable: Observable<any>;
 
-  constructor(@Inject('CHANNELS_WEBSOCKET_URL') CHANNELS_WEBSOCKET_URL) {
+  constructor(@Inject('WEBSOCKET_URL') WEBSOCKET_URL) {
     this.wsObservable = Observable.create(observer => {
-      this.ws = new WebSocket(CHANNELS_WEBSOCKET_URL);
+      this.ws = new WebSocket(WEBSOCKET_URL);
  
       this.ws.onopen = (event) => {
       };
