@@ -4,14 +4,15 @@ import { Headers, Http, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 import { Hero } from './hero';
-import { WebSocketDemultiplexerService } from './web-socket-demultiplexer.service';
+import { DataBinding } from './data-binding';
+import { WebSocketDataBindingService } from './web-socket-data-binding.service';
 
 @Injectable()
 export class HeroService {
   private heroesUrl = 'http://127.0.0.1:8001/api/hero';  // URL to web api
 
-  constructor(private http: Http, private webSocketDemultiplexerService: WebSocketDemultiplexerService) {
-    webSocketDemultiplexerService.subscribe('hero', payload => {
+  constructor(private http: Http, private webSocketDataBindingService: WebSocketDataBindingService) {
+    webSocketDataBindingService.subscribe('hero', 'hero_service.hero', payload => {
       this.onmessage(payload)
     });
   }
@@ -20,7 +21,7 @@ export class HeroService {
   @Output() updateEvent: EventEmitter<Hero> = new EventEmitter<Hero>();
   @Output() deleteEvent: EventEmitter<number> = new EventEmitter<number>();
 
-  private onmessage(payload: Object): void {
+  private onmessage(payload: DataBinding): void {
     if(payload.action === 'create') {
         let hero: Hero = {'id': payload.pk, 'name': payload.data.name} as Hero;
         this.createEvent.emit(hero);
@@ -54,40 +55,20 @@ export class HeroService {
   }
 
   delete(hero: Hero): void {
-    let payload: Object = {
-      'pk': hero.id,
-      'action': 'delete',
-      'model': 'hero_service.hero',
-    }
-
-    this.webSocketDemultiplexerService.sendData('hero', payload);
+    this.webSocketDataBindingService.delete(
+      'hero', 'hero_service.hero', hero.id);
   }
 
   // Add new Hero
   private create(hero: Hero): void {
-    let payload: Object = {
-      'action': 'create',
-      'model': 'hero_service.hero',
-      'data': {
-        'name': hero.name,
-      }
-    }
-
-    this.webSocketDemultiplexerService.sendData('hero', payload);
+    this.webSocketDataBindingService.create(
+      'hero', 'hero_service.hero', {'name': hero.name});
   }
 
   // Update existing Hero
   private update(hero: Hero): void {
-    let payload: Object = {
-      'pk': hero.id,
-      'action': 'update',
-      'model': 'hero_service.hero',
-      'data': {
-        'name': hero.name,
-      }
-    }
-
-    this.webSocketDemultiplexerService.sendData('hero', payload);
+    this.webSocketDataBindingService.update(
+      'hero', 'hero_service.hero', hero.id, {'name': hero.name});
   }
 
   private handleError(error: any): Promise<any> {

@@ -14,7 +14,7 @@ export class WebSocketService {
       };
  
       this.ws.onclose = (event) => {
-        if (e.wasClean) {
+        if (event.wasClean) {
           observer.complete();
         } else {
           observer.error(event);

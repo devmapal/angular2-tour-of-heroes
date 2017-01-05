@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable, Output } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 
 import { WebSocketDemultiplexerCallback } from './web-socket-demultiplexer-callback';
 import { WebSocketService } from './web-socket.service';
@@ -6,7 +6,7 @@ import { WebSocketStream } from './web-socket-stream';
 
 @Injectable()
 export class WebSocketDemultiplexerService {
-  private eventByStream: Map<string, EventEmitter<Object>;
+  private eventByStream: Map<string, EventEmitter<Object>>;
 
   constructor(private webSocketService: WebSocketService) {
     webSocketService.wsObservable.subscribe(data => {
@@ -34,6 +34,7 @@ export class WebSocketDemultiplexerService {
   }
 
   subscribe(stream: string, callback: WebSocketDemultiplexerCallback): void {
+    console.log(stream);
     if(!this.eventByStream.has(stream)) {
       this.eventByStream.set(stream, new EventEmitter());
     }
@@ -41,3 +42,4 @@ export class WebSocketDemultiplexerService {
     let eventEmitter = this.eventByStream.get(stream);
     eventEmitter.subscribe(callback);
   }
+}
