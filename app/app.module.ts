@@ -8,16 +8,15 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule, routedComponents } from './app-routing.module';
 import { HeroService } from './hero.service';
 import { HeroSearchComponent } from './hero-search.component';
-import { WebSocketService } from './web-socket.service';
-import { WebSocketDemultiplexerService } from './web-socket-demultiplexer.service';
-import { WebSocketDataBindingService } from './web-socket-data-binding.service';
+import { Ng2DjangoChannelsDataBindingModule } from 'ng2-django-channels-data-binding';
 
 @NgModule({
   imports: [
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    HttpModule
+    HttpModule,
+    Ng2DjangoChannelsDataBindingModule.forRoot({websocket_url: 'ws://127.0.0.1:8001/api/ws'})
   ],
   declarations: [
     AppComponent,
@@ -25,11 +24,7 @@ import { WebSocketDataBindingService } from './web-socket-data-binding.service';
     routedComponents
   ],
   providers: [
-    HeroService,
-    WebSocketService,
-    WebSocketDemultiplexerService,
-    WebSocketDataBindingService,
-    { provide: 'WEBSOCKET_URL', useValue: 'ws://127.0.0.1:8001/api/ws' }
+    HeroService
   ],
   bootstrap: [AppComponent]
 })

@@ -4,8 +4,7 @@ import { Headers, Http, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 import { Hero } from './hero';
-import { DataBinding } from './data-binding';
-import { WebSocketDataBindingService } from './web-socket-data-binding.service';
+import { DataBinding, WebSocketDataBindingService } from 'ng2-django-channels-data-binding';
 
 @Injectable()
 export class HeroService {
